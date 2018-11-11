@@ -189,6 +189,9 @@ open class Player: UIViewController {
             self._avplayer.volume = newValue
         }
     }
+    
+    /// Rate for the player, ranging from 0.0 to 2.0 on a linear scale.
+    open var rate: Float = 1.0
 
     /// Pauses playback automatically when resigning active.
     open var playbackPausesWhenResigningActive: Bool = true
@@ -426,9 +429,8 @@ extension Player {
     fileprivate func play() {
         if self.autoplay || self._hasAutoplayActivated {
             self.playbackState = .playing
-            if self._avplayer.rate == 0 {
-                self._avplayer.play()
-            }
+            self._avplayer.play()
+            self._avplayer.rate = rate
         }
     }
 
