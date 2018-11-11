@@ -426,7 +426,9 @@ extension Player {
     fileprivate func play() {
         if self.autoplay || self._hasAutoplayActivated {
             self.playbackState = .playing
-            self._avplayer.play()
+            if self._avplayer.rate == 0 {
+                self._avplayer.play()
+            }
         }
     }
 
