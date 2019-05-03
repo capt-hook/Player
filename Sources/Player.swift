@@ -328,8 +328,8 @@ open class Player: UIViewController {
             }
         }
     }
-    internal var _avplayer: AVPlayer! = AVPlayer()
-    internal var _stashedAVPlayer: AVPlayer?
+    internal var _avplayer: AVPlayer = AVPlayer()
+    internal var _shouldUpdatePlayerLayerAVPlayer: Bool = true
     internal var _playerItem: AVPlayerItem?
 
     internal var _playerObservers = [NSKeyValueObservation]()
@@ -412,15 +412,13 @@ open class Player: UIViewController {
 extension Player {
     
     open func prepareToPlayAudioInBackground() {
-        _stashedAVPlayer = _avplayer
+        _shouldUpdatePlayerLayerAVPlayer = false
         _playerView.playerLayer.player = nil
-        _avplayer = nil
     }
     
     open func restoreFromPlayingAudioInBackground() {
-        _playerView.playerLayer.player = _stashedAVPlayer
-        _avplayer = _stashedAVPlayer
-        _stashedAVPlayer = nil
+        _shouldUpdatePlayerLayerAVPlayer = true
+        _playerView.playerLayer.player = _avplayer
     }
 
     /// Begins playback of the media from the beginning.
@@ -726,7 +724,9 @@ extension Player {
 
             switch object.status {
             case .readyToPlay:
-                self?._playerView.player = self?._avplayer
+                if self?._shouldUpdatePlayerLayerAVPlayer ?? false {
+                    self?._playerView.player = self?._avplayer
+                }
             case .failed:
                 self?.playbackState = PlaybackState.failed
             default:
