@@ -329,6 +329,7 @@ open class Player: UIViewController {
         }
     }
     internal var _avplayer: AVPlayer = AVPlayer()
+    internal var _stashedAVPlayer: AVPlayer?
     internal var _playerItem: AVPlayerItem?
 
     internal var _playerObservers = [NSKeyValueObservation]()
@@ -409,6 +410,18 @@ open class Player: UIViewController {
 // MARK: - action funcs
 
 extension Player {
+    
+    open func prepareToPlayAudioInBackground() {
+        _stashedAVPlayer = _avplayer
+        _playerView.playerLayer.player = nil
+        _avplayer = nil
+    }
+    
+    open func restoreFromPlayingAudioInBackground() {
+        _playerView.playerLayer.player = _stashedAVPlayer
+        _avplayer = _stashedAVPlayer
+        _stashedAVPlayer = nil
+    }
 
     /// Begins playback of the media from the beginning.
     open func playFromBeginning() {
