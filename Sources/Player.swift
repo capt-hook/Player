@@ -746,7 +746,9 @@ extension Player {
             case .unknown:
                 fallthrough
             case .readyToPlay:
-                self?._playerView.player = self?._avplayer
+                if self?._shouldUpdatePlayerLayerAVPlayer ?? false {
+                    self?._playerView.player = self?._avplayer
+                }
                 break
             case .failed:
                 self?.playbackState = PlaybackState.failed
