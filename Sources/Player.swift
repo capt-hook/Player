@@ -328,7 +328,7 @@ open class Player: UIViewController {
             }
         }
     }
-    internal var _avplayer: AVPlayer = AVPlayer()
+    internal var _avplayer: AVPlayer! = AVPlayer()
     internal var _stashedAVPlayer: AVPlayer?
     internal var _playerItem: AVPlayerItem?
 
